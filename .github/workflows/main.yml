@@ -1,0 +1,29 @@
+name: Pipeline de CI do Aluno
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  validacao:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixando o código fonte
+        uses: actions/checkout@v4
+
+      - name: Configurando o Python na Máquina Virtual
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Executando Testes Automatizados e Gerando Relatório
+        run: |
+          echo "=== RELATÓRIO DO PROCESSO DE BUILD ===" > relatorio_build.txt
+          python sistema.py >> relatorio_build.txt
+
+      - name: Salvando Artefato de Debug (Relatório Final)
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-de-sucesso
+          path: relatorio_build.txt
